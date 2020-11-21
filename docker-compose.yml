@@ -1,0 +1,18 @@
+version: '2'
+services:
+  opa:
+    image: openpolicyagent/opa:0.21.1
+    ports:
+      - 8181:8181
+    command:
+      - "run"
+      - "--server"
+      - "--log-format=json-pretty"
+      - "--set=decision_logs.console=true"
+  api_server:
+    image: openpolicyagent/demo-restful-api:0.2
+    ports:
+      - 5000:5000
+    environment:
+      - OPA_ADDR=http://opa:8181
+      - POLICY_PATH=/v1/data/httpapi/authz
